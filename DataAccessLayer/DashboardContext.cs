@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Configuration;
 using DomainModels;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,12 +30,23 @@ public class DashboardContext : DbContext
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
-    
+
 
     modelBuilder.ApplyConfiguration(new DashboardConfiguration());
     modelBuilder.ApplyConfiguration(new WidgetConfiguration());
 
     base.OnModelCreating(modelBuilder);
   }
-}
 
+  public class DashboardContextFactory : IDesignTimeDbContextFactory<DashboardContext>
+  {
+    public DashboardContext CreateDbContext(string[] args)
+    {
+      var options = new DbContextOptionsBuilder<DashboardContext>()
+        .UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=AkgDashboardDb;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False")
+        .Options;
+      return new DashboardContext(options);
+    }
+  }
+
+}
