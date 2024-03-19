@@ -20,7 +20,7 @@ public abstract class GenericRepository<T, TKey>(DashboardContext dashboardConte
     return entity;
   }
 
-  public async Task<T> GetById(TKey key)
+  public async Task<T?> GetById(TKey key)
   {
     var entity = await _context.Set<T>().FindAsync(key);
     return entity;

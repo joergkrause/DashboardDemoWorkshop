@@ -8,7 +8,7 @@ namespace Repositories
   {
     Task<T> Add(T entity);
     Task<IEnumerable<T>> GetAll();
-    Task<T> GetById(TKey key);
+    Task<T?> GetById(TKey key);
     Task<bool> InsertOrUpdate(T entity);
   }
 }
