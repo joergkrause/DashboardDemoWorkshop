@@ -13,4 +13,10 @@ public class DashboardService(DashboardClient client, IMapper mapper)
     var vms = mapper.Map<IEnumerable<DashboardViewModel>>(dtos);
     return new DashboardTableViewModel { Dashboards = vms };
   }
+
+  public async Task<DashboardViewModel> GetDashboardAsync(int id)
+  {
+    var dto = await client.GetDashboardByIdAsync(id);
+    return mapper.Map<DashboardViewModel>(dto);
+  }
 }

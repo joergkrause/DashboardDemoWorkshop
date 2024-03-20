@@ -1,42 +1,82 @@
 ﻿@page "/dashboards"
+@using DashboardFrontend.Components.Pages.Fragments
 @using ViewModels
 @* Wir wollten doch keine Kommentare schreiben! *@
 @inject DashboardService DashboardService
 
 <h3>Dashboards</h3>
-@if (Model == null)
-{
-  <p><em>Loading...</em></p>
-}
-else
-{
-  <table class="table">
-    <thead>
-      <tr>
-        <th>Id</th>
-        <th>Name</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      @foreach (var dashboard in Model.Dashboards)
-      {
+<Condition Check="Model == null" @ref="condition">
+  <If>
+    <p><em>Loading...</em></p>
+  </If>
+  <Else>
+    <table class="table">
+      <thead>
         <tr>
-          <td>@dashboard.Id</td>
-          <td>@dashboard.Name</td>
-          <td>...</td>
+          <th>Id</th>
+          <th>Name</th>
+          <th>Action</th>
         </tr>
-      }
-    </tbody>
-  </table>
-}
+      </thead>
+      <tbody>
+        @foreach (var dashboard in Model.Dashboards)
+        {
+          <tr>
+            <td>@dashboard.Id</td>
+            <td>@dashboard.Name</td>
+            <td>
+              <button class="btn btn-primary" @onclick="@(() => SetModel(dashboard.Id))">Details</button>
+              <button class="btn btn-success" @onclick="@(() => EditModel(dashboard.Id))">Edit</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <Condition Check="selectedModelId != 0">
+      <If>
+        <DashboardDetails Id="selectedModelId"></DashboardDetails>
+      </If>
+    </Condition>
+    <Condition Check="editModelId != 0">
+      <If>
+        <EditForm Model="editModel" OnValidSubmit="Save">
+          <DataAnnotationsValidator />
+          <ValidationSummary />
+          <input @bind-value="editModel.Name" />         
+          <button type="submit">Save</button>
+        </EditForm>
+      </If>
+    </Condition>
+  </Else>
+</Condition>
 
 @code {
 
   private DashboardTableViewModel? Model;
+  private int selectedModelId;
+  private int editModelId;
+  private DashboardViewModel editModel;
+
+  private Condition condition;
 
   protected override async Task OnInitializedAsync()
   {
     Model = await DashboardService.GetDashboardListAsync();
+  }
+
+  private async Task Save()
+  {
+    // await DashboardService.Update(editModel);
+  }
+
+  private void SetModel(int id)
+  {
+    selectedModelId = id;
+  }
+
+  private void EditModel(int id)
+  {
+    editModel = Model.Dashboards.FirstOrDefault(d => d.Id == id);
+    editModelId = id;
   }
 }

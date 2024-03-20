@@ -1,5 +1,21 @@
-﻿<h3>Condition</h3>
+﻿@if (Check)
+{
+  @If
+}
+else
+{
+  @Else
+}
 
 @code {
+
+  [Parameter]
+  public bool Check { get; set; }
+
+  [Parameter]
+  public RenderFragment? If { get; set; }
+
+  [Parameter]
+  public RenderFragment? Else { get; set; }
 
 }

@@ -1,5 +1,29 @@
-﻿<h3>DashboardDetails</h3>
+﻿@using ViewModels
+
+@inject DashboardService DashboardService
+<h3>Dashboard Details</h3>
+
+<ul>
+  <li>@Model?.Id</li>
+  <li>@Model?.Name</li>
+  <li>@Model?.IsActive</li>
+</ul>
 
 @code {
+
+  private DashboardViewModel? Model;
+
+  [Parameter]
+  public int Id { get; set; }
+
+  protected override async Task OnParametersSetAsync()
+  {
+    Model = await DashboardService.GetDashboardAsync(Id);
+  }
+
+  protected override async Task OnInitializedAsync()
+  {
+    
+  }
 
 }
