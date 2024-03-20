@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace BackendService.Controllers
 {
   [Route("api/[controller]")]
-  [ApiController]
+  // [ApiController]
   [ProducesResponseType(StatusCodes.Status500InternalServerError)]
   public class DashboardController(IDashboardWidgetManager manager) : ControllerBase
   {
@@ -53,7 +53,7 @@ namespace BackendService.Controllers
     [HttpPost(Name = "CreateDashboard")]
     [ProducesResponseType(typeof(void), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create([FromBody]  DashboardCreateDto dto)
+    public async Task<IActionResult> Create([FromBody] DashboardCreateDto dto)
     {
       await manager.CreateDashboard(dto);
       return Created();

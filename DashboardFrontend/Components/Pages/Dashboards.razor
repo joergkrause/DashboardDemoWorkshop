@@ -1,0 +1,42 @@
+﻿@page "/dashboards"
+@using ViewModels
+@* Wir wollten doch keine Kommentare schreiben! *@
+@inject DashboardService DashboardService
+
+<h3>Dashboards</h3>
+@if (Model == null)
+{
+  <p><em>Loading...</em></p>
+}
+else
+{
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Name</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var dashboard in Model.Dashboards)
+      {
+        <tr>
+          <td>@dashboard.Id</td>
+          <td>@dashboard.Name</td>
+          <td>...</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+}
+
+@code {
+
+  private DashboardTableViewModel? Model;
+
+  protected override async Task OnInitializedAsync()
+  {
+    Model = await DashboardService.GetDashboardListAsync();
+  }
+}
